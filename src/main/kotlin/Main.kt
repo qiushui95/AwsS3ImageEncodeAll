@@ -1,7 +1,10 @@
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials
+import software.amazon.awssdk.auth.credentials.AwsCredentials
 import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider
 import software.amazon.awssdk.services.s3.S3Client
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Request
 
@@ -17,7 +20,14 @@ fun main(args: Array<String>): Unit = runBlocking {
     val execType = args[0]
 
     val s3Client = S3Client.builder()
-        .credentialsProvider(DefaultCredentialsProvider.create())
+        .credentialsProvider(
+            StaticCredentialsProvider.create(
+                AwsBasicCredentials.create(
+                    "AKIAWTEKVF6PS6A2LSXV",
+                    "Lf254Nw7d5kxRjeQ5etDQKugfD1XL+0aBzHq4Kwn"
+                )
+            )
+        )
         .build()
 
     transaction {
