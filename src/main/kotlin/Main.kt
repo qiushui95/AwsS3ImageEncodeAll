@@ -59,7 +59,13 @@ private fun listS3(s3Client: S3Client) {
             count++
             val s3Key = s3Object.key()
 
-            val extension = s3Key.substring(s3Key.lastIndexOf('.'))
+            val lastDotIndex = s3Key.lastIndexOf('.')
+
+            val extension = if (lastDotIndex == -1 || lastDotIndex + 1 >= s3Key.length) {
+                ""
+            } else {
+                s3Key.substring(lastDotIndex + 1)
+            }
 
             S3ObjectTable.insert {
                 it[S3ObjectTable.s3Key] = s3Key
