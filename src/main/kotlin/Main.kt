@@ -22,14 +22,14 @@ fun main(args: Array<String>): Unit = runBlocking {
     println("当前execType($execType)")
 
     val s3Client = S3Client.builder()
-        .credentialsProvider(
-            StaticCredentialsProvider.create(
-                AwsBasicCredentials.create(
-                    "AKIAWTEKVF6PS6A2LSXV",
-                    "Lf254Nw7d5kxRjeQ5etDQKugfD1XL+0aBzHq4Kwn"
-                )
-            )
-        )
+//        .credentialsProvider(
+//            StaticCredentialsProvider.create(
+//                AwsBasicCredentials.create(
+//                    "AKIAWTEKVF6PS6A2LSXV",
+//                    "Lf254Nw7d5kxRjeQ5etDQKugfD1XL+0aBzHq4Kwn"
+//                )
+//            )
+//        )
         .build()
 
     transaction {
