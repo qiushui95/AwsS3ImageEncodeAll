@@ -1,7 +1,5 @@
 import kotlinx.coroutines.runBlocking
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import software.amazon.awssdk.services.s3.S3Client
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Request
@@ -22,6 +20,8 @@ fun main(args: Array<String>): Unit = runBlocking {
     transaction {
         SchemaUtils.create(S3ObjectTable)
 
+        addLogger(StdOutSqlLogger)
+
         when (execType) {
             "list" -> listS3(s3Client)
             else -> println("不认识的execType($execType)")
@@ -37,8 +37,11 @@ private fun listS3(s3Client: S3Client) {
 
     val response = s3Client.listObjectsV2(request)
 
+    var count = 0
+
     while (response.isTruncated) {
         for (s3Object in response.contents()) {
+            count++
             val s3Key = s3Object.key()
 
             val extension = s3Key.substring(s3Key.lastIndexOf('.'))
@@ -48,5 +51,7 @@ private fun listS3(s3Client: S3Client) {
                 it[S3ObjectTable.extension] = extension
             }
         }
+
+        println("已处理${count}个")
     }
 }
