@@ -35,7 +35,7 @@ fun main(args: Array<String>): Unit = runBlocking {
     transaction {
         SchemaUtils.create(S3ObjectTable)
 
-        addLogger(StdOutSqlLogger)
+//        addLogger(StdOutSqlLogger)
 
         when (execType) {
             "list" -> listS3(s3Client)
@@ -45,7 +45,7 @@ fun main(args: Array<String>): Unit = runBlocking {
     }
 }
 
-private fun listS3(s3Client: S3Client) {
+private fun Transaction.listS3(s3Client: S3Client) {
     val request = ListObjectsV2Request.builder()
         .bucket("res-southeast")
         .build()
@@ -72,6 +72,8 @@ private fun listS3(s3Client: S3Client) {
                 it[S3ObjectTable.extension] = extension
             }
         }
+
+        commit()
 
         println("已处理${count}个")
     }
