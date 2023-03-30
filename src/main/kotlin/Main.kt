@@ -70,6 +70,8 @@ private fun Transaction.listS3(s3Client: S3Client) {
             S3ObjectTable.insert {
                 it[S3ObjectTable.s3Key] = s3Key
                 it[S3ObjectTable.extension] = extension
+                it[S3ObjectTable.fileSize] = s3Object.size()
+                it[S3ObjectTable.createTime] = s3Object.lastModified().toEpochMilli()
             }
         }
 
