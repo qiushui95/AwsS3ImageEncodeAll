@@ -11,13 +11,15 @@ import software.amazon.awssdk.services.s3.model.ListObjectsV2Request
 fun main(args: Array<String>): Unit = runBlocking {
 
     Database.connect(
-        "jdbc:mysql://13.229.134.152:3306/S3Image",
+        "jdbc:mysql://127.0.0.1:3306/S3Image",
         driver = "com.mysql.cj.jdbc.Driver",
         user = "root",
         password = "12356789"
     )
 
     val execType = args[0]
+
+    println("当前execType($execType)")
 
     val s3Client = S3Client.builder()
         .credentialsProvider(
